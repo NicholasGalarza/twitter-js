@@ -1,10 +1,38 @@
+const nunjucks = require('nunjucks');
 const express = require( 'express' );
 const app = express(); // creates an instance of an express application
 
+const locals = {
+  title: 'An Example',
+  people: [
+    { name: 'Gandalf'},
+    { name: 'Frodo' },
+    { name: 'Hermione'}
+  ]
+};
+
+nunjucks.configure('views', {noCache: true}); // point nunjucks to the proper directory for templates
+
+nunjucks.render('index.html', locals, function (err, output) {
+  console.log(output);
+});
+
+// nunjucks.configure('views', {
+//   autoescape: true,
+//   express: app
+// });
+
+app.set('view engine', 'html'); // have res.render work with html files
+
+app.engine('html', nunjucks.render); // when giving html files to res.render, tell it to use nunjucks
+
+app.get('/', function(req, res) {
+  res.render('index', locals);
+});
+
+//Middleware
 app.use(function (req, res, next) {
-    // do your logging here
     console.log(req.method, req.url, 'StatusCode: ', res.statusCode);
-    // call `next`, or else your app will be a black hole — receiving requests but never properly responding
     next();
 });
 
@@ -13,9 +41,10 @@ app.use('/special', function (req, res, next) {
   next();
 });
 
-app.get('/', function(req, res) {
-  res.send('Home Page: Hello World!');
-});
+//Routes
+// app.get('/', function(req, res) {
+//   res.send('Home Page: Hello World!');
+// });
 
 app.post('/testing', function(req, res) {
   res.send('POST: Testing');
