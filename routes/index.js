@@ -6,12 +6,14 @@ const path = require('path');
 const tweetBank = require('../tweetBank');
 
 
+
 router.use(express.static('public'));
 
 router.get('/', function(req, res) {
   const allTweets = tweetBank.list();
   res.render('index', {
-    tweets: allTweets
+    tweets: allTweets,
+    showForm: true
   });
 });
 
@@ -33,6 +35,13 @@ router.get('/tweets/:id', function(req, res, next) {
   res.render('index', {
     tweets: idTweets
   });
+});
+
+router.post('/tweets', function(req, res, next) {
+  // body-parser allows you to transmit url encoding.
+  tweetBank.add(req.body.name, req.body.content);
+  // instructs browser to go to a different location.
+  res.redirect('/');
 });
 
 module.exports = router;
