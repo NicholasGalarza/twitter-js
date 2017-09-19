@@ -1,9 +1,10 @@
+'use strict'
 const _ = require('lodash');
 
 let data = [];
 
 function add (name, content) {
-  data.push({ name: name, content: content });
+  data.push({ name: name, content: content, id: data.length}); // have data length organically grow.
 }
 
 function list () {

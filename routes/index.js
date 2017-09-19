@@ -25,4 +25,14 @@ router.get('/users/:name', function(req, res) {
   });
 });
 
+// link user's tweets elsehwere.
+router.get('/tweets/:id', function(req, res, next) {
+  let idTweets = tweetBank.find({
+    id: Number(req.params.id)
+  });
+  res.render('index', {
+    tweets: idTweets
+  });
+});
+
 module.exports = router;
